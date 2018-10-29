@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crystalCLAIMSAPI.Data;
 
 namespace crystalCLAIMSAPI.Migrations
 {
     [DbContext(typeof(CrystalCLAIMSDbContext))]
-    partial class CrystalCLAIMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181010063454_DbChanges1")]
+    partial class DbChanges1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

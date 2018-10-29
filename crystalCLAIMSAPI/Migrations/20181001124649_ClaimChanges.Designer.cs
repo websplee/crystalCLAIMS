@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crystalCLAIMSAPI.Data;
 
 namespace crystalCLAIMSAPI.Migrations
 {
     [DbContext(typeof(CrystalCLAIMSDbContext))]
-    partial class CrystalCLAIMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181001124649_ClaimChanges")]
+    partial class ClaimChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,7 +351,9 @@ namespace crystalCLAIMSAPI.Migrations
 
                     b.Property<string>("Firstname");
 
-                    b.Property<int>("HealthcareProviderId");
+                    b.Property<int>("HCPId");
+
+                    b.Property<int?>("HealthcareProviderId");
 
                     b.Property<bool?>("IsActive");
 
@@ -484,7 +488,9 @@ namespace crystalCLAIMSAPI.Migrations
 
                     b.Property<string>("Firstname");
 
-                    b.Property<int>("InsuranceProviderId");
+                    b.Property<int?>("InsuranceProviderId");
+
+                    b.Property<int>("Ipid");
 
                     b.Property<bool?>("IsActive");
 
@@ -528,8 +534,6 @@ namespace crystalCLAIMSAPI.Migrations
                     b.Property<DateTime?>("RejectionDate");
 
                     b.Property<DateTime>("SubmissionDate");
-
-                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -615,9 +619,9 @@ namespace crystalCLAIMSAPI.Migrations
 
                     b.Property<DateTime>("SubmissionDate");
 
-                    b.Property<string>("Telephone");
+                    b.Property<string>("Telehpone1");
 
-                    b.Property<string>("Telephone1");
+                    b.Property<string>("Telephone");
 
                     b.Property<string>("Website");
 

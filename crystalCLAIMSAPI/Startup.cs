@@ -9,12 +9,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using crystalCLAIMSAPI.Models;
 using crystalCLAIMSAPI.Data;
 using crystalCLAIMSAPI.Resources;
 using crystalCLAIMSAPI.Repositories;
 using crystalCLAIMSAPI.Repositories.Interfaces;
 using crystalCLAIMSAPI.Helpers;
+using crystalCLAIMSAPI.ViewModels;
+using crystalCLAIMSAPI.UnitOfWork;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace crystalCLAIMSAPI
@@ -95,16 +99,18 @@ namespace crystalCLAIMSAPI
                 .AddScoped<IIPUSerRepository, IPUserRepository>()
                 .AddScoped<IMedicalPersonnelRepository, MedicalPersonnelRepository>()
                 .AddScoped<IMemberRepository, MemberRepository>()
-                .AddScoped<IPolicyHolderRepository, PolicyHolderRespository>()
+                .AddScoped<IPolicyHolderRepository, PolicyHolderRespository>() 
                 .AddScoped<IProvinceRepository, ProvinceRepository>()
                 .AddScoped<IStandardDiagnosisRepository, StandardDiagnosisRepository>()
                 .AddScoped<IStandardDrugRepository, StandardDrugRepository>()
-                .AddScoped<IStandardServiceProvidedRepository, StandardServiceProvidedRepository>();
+                .AddScoped<IStandardServiceProvidedRepository, StandardServiceProvidedRepository>()
+                .AddScoped<IUnitOfWork, HttpUnitOfWork>();
 
             services.Configure<CrystalConfig>(Configuration.GetSection("crystalCLAIMSAPIConfig"));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
             services.AddSingleton<LocService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Specifically added for the HttpUnitOfWork injection
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddAuthentication();            
@@ -119,6 +125,12 @@ namespace crystalCLAIMSAPI
                         return factory.Create("SharedResource", assemblyName.Name);
                     };
                 });
+            services.AddAutoMapper(x => x.AddProfile(new AutoMapperProfile()));
+            
+            /*Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });*/
 
             // Add Swagger support
             services.AddSwaggerGen(c =>
@@ -153,7 +165,8 @@ namespace crystalCLAIMSAPI
             // services.AddTransient<IProfileService, IdentityWithAdditionalClaimsProfileService>();
 
             // services.AddTransient<IEmailSender, EmailSender>();
-
+            // Business Services
+            services.AddScoped<IEmailer, Emailer>();
 
         }
 
@@ -188,7 +201,7 @@ namespace crystalCLAIMSAPI
                 .AllowAnyMethod());
 
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            // app.UseSpaStaticFiles();
             app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -205,8 +218,8 @@ namespace crystalCLAIMSAPI
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                name: "default",
+                template: "{controller=Claims}/{action=Get}/{id?}");
             });
 
             // Database initialization here 

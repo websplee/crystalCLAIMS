@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using crystalCLAIMSAPI.Models.Interfaces;
 
-namespace crystalCLAIMSAPI.Models
+namespace crystalCLAIMSAPI.ViewModels
 {
-    public class PolicyHolder : AuditableEntity, IEntityBase
+    public class PolicyHolderViewModel
     {
-        public PolicyHolder()
-        {
-            Members = new HashSet<Member>();
-        }
-
-        public int Id { get; set; }
         public string PolicyHolderName { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
@@ -26,7 +19,7 @@ namespace crystalCLAIMSAPI.Models
         public string Status { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ICollection<Member> Members { get; set; }
-        public virtual InsuranceProvider InsuranceProvider { get; set; }
+        public string ProviderName { get; set; }
+        public ICollection<MemberViewModel> Members { get; set; }
     }
 }

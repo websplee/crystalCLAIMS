@@ -21,9 +21,11 @@ namespace crystalCLAIMSAPI.Models
         public string AspNetUserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public int HCPId { get; set; }
-        public bool? IsAdmin { get; set; }
+        public int HealthcareProviderId { get; set; }
+        public bool? IsAdmin { get; set; } 
         public bool? IsActive { get; set; }
+        public bool? IsMaker { get; set; }
+        public bool? IsChecker { get; set; }
 
         public virtual ICollection<Claim> ClaimsHCPApprovers { get; set; }
         public virtual ICollection<Claim> ClaimsHCPInputers { get; set; }
